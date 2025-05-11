@@ -1,0 +1,245 @@
+
+
+
+/* Style pour le logo */
+.j {
+    font-family: 'Georgia', serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--deep-red);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 1.5;
+    margin-bottom: 1.5rem; /* Espace sous le logo */
+    align-self: center; /* Centre le logo verticalement dans son parent */
+  }
+  
+  /* Conteneur du logo, pour s'assurer qu'il est bien centré */
+  .q {
+
+    margin-top: 1.1rem; /* Ajuste le top margin si nécessaire */
+  }
+  
+  /* Style global pour les liens */
+  .a, .d {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem; /* Espace autour du lien */
+    border-radius: 0.375rem; /* Coins arrondis */
+    color: #f3eaea; /* Couleur du texte */
+    text-decoration: none; /* Supprimer la décoration du lien */
+  }
+  
+  .a:hover, .d:hover {
+    background-color: #9f9c62; /* Changement de couleur de fond au survol */
+    color: #32342d; /* Changement de couleur de texte au survol */
+  }
+  
+  /* Espacement entre l'icône et le texte pour tous les liens */
+  .a span, .d span {
+    margin-left: 0.5rem; /* Ajoute un espace entre l'icône et le texte */
+  }
+  
+  /* Personnalisation de l'icône */
+  .a .text-lg, .d .text-lg {
+    font-size: 1.125rem; /* Taille de l'icône */
+  }
+  
+  /* Pour les couleurs et les styles spécifiques de chaque lien */
+  .d {
+    background-color: #9f9c62;
+    color: #32342d;
+  }
+  
+  .a:hover, .d:hover {
+    background-color: #9f9c62;
+    color: #32342d;
+  }
+  
+  .b {
+    margin-left: 16rem; /* équivalent à ml-64 de Tailwind */
+    padding: 2rem;      /* équivalent à p-8 de Tailwind */
+    background-color: #32342d; /* facultatif si tu veux un fond sombre */
+    min-height: 100vh;  /* pour que le contenu prenne toute la hauteur */
+    box-sizing: border-box;
+  }
+  
+  .e {
+    background-color: #9f9c62; /* Beige lumineux pour les arrière-plans ou sections secondaires */
+}
+/* Conteneur principal */
+
+  /* Header */
+  .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.header-left h1 {
+  font-size: 1.3rem; /* Tailwind: text-2xl */
+  font-weight: bold;
+  margin-right: 500px;
+  color: white;
+}
+
+.header-left p {
+  color: white;
+  font-size: 1rem;
+  margin-right: 300px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 2rem; /* Tailwind: space-x-4 */
+}
+
+.profile-img-container {
+  position: relative;
+}
+
+.profile-img {
+  border-radius: 9999px; /* rounded-full */
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+  
+  /* Stats cards */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .stats-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  .cards {
+    background-color: #9f9c62;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 2px 6px rgba(139, 42, 42, 0.1);
+    transition: transform 0.2s ease;
+  }
+  
+  .cards:hover {
+    transform: scale(1.02);
+  }
+  
+  .cards-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  
+  .icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+  }
+  
+  .bg-blue { background-color: #3b82f6; }
+  .bg-purple { background-color: #8b5cf6; }
+  .bg-green { background-color: #10b981; }
+  .bg-red { background-color: #ef4444; }
+  
+  .label {
+    font-size: 0.875rem;
+    color: black;
+  }
+  
+  .cards-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1f2937;
+  }
+  
+  .cards-trend {
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .cards-trend.blue { color: #3b82f6; }
+  .cards-trend.purple { color: #8b5cf6; }
+  .cards-trend.green { color: #10b981; }
+  .cards-trend.red { color: #ef4444; }
+  
+  /* Icône couleurs */
+  .bg-blue { background-color: #bfdbfe; }
+  .text-blue { color: #2563eb; }
+  
+  .bg-purple { background-color: #e9d5ff; }
+  .text-purple { color: #7c3aed; }
+  
+  .bg-green { background-color: #bbf7d0; }
+  .text-green { color: #16a34a; }
+  
+  .bg-red { background-color: #fecaca; }
+  .text-red { color: #dc2626; }
+  
+  .cards-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+  
+  .cards-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1f2937;
+  }
+  
+  .cards-footer {
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  /* Charts */
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+  .charts-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.chart-cards {
+  background-color: #9f9c62;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chart-title {
+  font-size: 1.125rem; /* 18px */
+  font-weight: 600;
+  color: #1f2937; /* gris très foncé */
+  margin-bottom: 1rem;
+}
+
+  
