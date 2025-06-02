@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();  // Ajout de la colonne email
             $table->string('password');
-            $table->enum('role', ['admin', 'utilisateur'])->default('admin');
+            $table->enum('role', ['admin', 'Utilisateur'])->default('admin');
             $table->timestamps();
         });
     }

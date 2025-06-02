@@ -49,10 +49,7 @@ const Sidebar = () => {
             <FontAwesomeIcon icon={faUserTie} className="sidebar-icon" />
             <span>gestion</span>
           </a>
-          <a href="/admin/commande" className="sidebar-link">
-            <FontAwesomeIcon icon={faBox} className="sidebar-icon" />
-            <span>commande</span>
-          </a>
+        
           <a href="/admin/statistique" className="sidebar-link">
             <FontAwesomeIcon icon={faChartLine} className="sidebar-icon" />
             <span>Statistiques</span>
@@ -69,4 +66,4 @@ const Sidebar = () => {
   )
 };
 
-export default Sidebar;
+export default Sidebar

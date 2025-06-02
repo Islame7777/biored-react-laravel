@@ -10,22 +10,44 @@ class ProduitController extends Controller
     // Liste des produits avec leurs catégories
     public function index()
     {
-        return Produit::with('categorie')->get();
+        $produits = \App\Models\Produit::all();
+    
+        // appliquer l'accessor manuellement
+        $produits->each(function ($produit) {
+            $produit->image = $produit->image;
+        });
+    
+        return response()->json($produits);
     }
-
-    // Ajouter un nouveau produit
+    
+    
+    
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'nom' => 'required|string|max:255',
-            'categorie_id' => 'required|exists:categories,id',
-            'prix' => 'required|numeric',
-            'stock' => 'required|integer',
-        ]);
+{
+    $request->validate([
+        'nom' => 'required|string|max:255',
+        'prix' => 'required|numeric',
+        'categorie_id' => 'required|exists:categories,id',
+        'stock' => 'required|integer',
+        'image' => 'nullable|image|max:2048', // 2 Mo max
+    ]);
 
-        $produit = Produit::create($validated);
-        return response()->json($produit->load('categorie'), 201);
+    $path = null;
+    if ($request->hasFile('image')) {
+        $path = $request->file('image')->store('produits', 'public');
     }
+
+    $produit = Produit::create([
+        'nom' => $request->nom,
+        'prix' => $request->prix,
+        'categorie_id' => $request->categorie_id,
+        'stock' => $request->stock,
+        'image' => $path, // Exemple : produits/tshirt.jpg
+    ]);
+
+    return response()->json($produit);
+}
+
 
     // Afficher un produit spécifique
     public function show($id)

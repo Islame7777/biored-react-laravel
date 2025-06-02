@@ -104,13 +104,13 @@ export default function Product() {
         <div className="stat-card">
           <div className="stat-header">
             <h3>Total Produits</h3>
-            <div className="icon"><i className="fas fa-cube"></i></div>
+            <div className="icon"><i className="fas fa-cube"></i></div>         
           </div>
           <div className="stat-footer">
-            <div>
+         
               <p className="stat-value">{produits.length}</p>
               <p>Produits actifs</p>
-            </div>
+            
             <div className="trend up">
               <i className="fas fa-arrow-up"></i>
               <span>12% ce mois</span>
@@ -144,7 +144,7 @@ export default function Product() {
           <div className="stat-footer">
             <div>
               <p className="stat-value">
-                {produits.filter(p => Number(p.stock) < 5).length}
+                {produits.filter(p => Number(p.stock) < 20).length}
               </p>
               <p>Produits en alerte</p>
             </div>
@@ -241,7 +241,7 @@ export default function Product() {
                     </select>
                   </div>
                   <div>
-                    <label htmlFor="prix" className="label">Prix (Dhs)</label>
+                    <label htmlFor="prix" className="label">Prix ($)</label>
                     <input
                       type="number"
                       id="prix"

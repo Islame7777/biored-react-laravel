@@ -20,6 +20,8 @@ import PageAc from "./page/pageAc";
 import PageG from "./page/pageG";
 import PageS from "./page/pageS";
 import PageC from "./page/pageC";
+import PageF from "./page/pageF";
+import pageA from "./page/pageaff"
 
 // import Home from './components/Home';
 // import Dashboard from './components/Dashboard';
@@ -44,8 +46,8 @@ function App() {
       <CssBaseline />
       <Router>
         <Routes>
-          <Route path="/seconnecter" element={<Login />} />
-          <Route path="/" element={<Page/>} />
+          <Route path="/" element={<Login />} />
+          <Route path="/home" element={<Page/>} />
           <Route path="/product" element={<PageP/>} />
           <Route path="/promotion" element={<PagePromo/>} />
           <Route path="/cadeau" element={<PageCadeau/>} />
@@ -55,6 +57,7 @@ function App() {
            <Route path="/admin/gestion" element={<PageG/>} />  
                <Route path="/admin/statistique" element={<PageS/>} />
                <Route path="/admin/commande" element={<PageC/>}/>
+               <Route path="/product/:slug" element={<PageF />} />
         </Routes>
       </Router>
     </ThemeProvider>

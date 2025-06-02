@@ -20,6 +20,7 @@ import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
 import PaymentIcon from '@mui/icons-material/Payment';
 
+
 function Footer() {
   return (
     <Box sx={{ 

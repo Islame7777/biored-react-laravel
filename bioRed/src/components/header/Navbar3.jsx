@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom'; // Import du vrai Link pour naviguer
 import KeyboardArrowRightOutlinedIcon from '@mui/icons-material/KeyboardArrowRightOutlined';
 import { useTheme } from '@mui/material/styles'; // Import correct de useTheme
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import { Stack } from '@mui/material';
+
 
 function Navbar3() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -97,12 +99,7 @@ function Navbar3() {
             <ListItemText>Promotion</ListItemText>
           </MenuItem>
 
-          <MenuItem component={Link} to="/cadeau" onClick={handleClose}>
-            <ListItemIcon>
-              <ArrowCircleRightIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Cadeau</ListItemText>
-          </MenuItem>
+        
         </Menu>
       </Box>
 
@@ -111,45 +108,53 @@ function Navbar3() {
       </IconButton>
 
       <Drawer
-        anchor={'right'}
-        open={state['right']}
-        onClose={toggleDrawer('right', false)}
-        sx={{ ".MuiPaper-root": { width: '50%' }}}
-      >
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h6" gutterBottom>
-            Menu
-          </Typography>
+  anchor="right"
+  open={state['right']}
+  onClose={toggleDrawer('right', false)}
+  sx={{ '.MuiDrawer-paper': { width: '300px', p: 2 } }}
+>
+  <Box display="flex" flexDirection="column" height="100%">
+    {/* En-tête */}
+    <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+      <Typography variant="h6" fontWeight="bold">Menu</Typography>
+      <IconButton onClick={toggleDrawer('right', false)}>
+        <MenuIcon />
+      </IconButton>
+    </Box>
 
-          <MuiLink component={Link} to="/" underline="none" color="primary" display="block" mb={1}>
-            Accueil
-          </MuiLink>
+    {/* Navigation */}
+    <Box mb={3}>
+      <Typography variant="subtitle2" color="text.secondary" mb={1}>
+        Navigation
+      </Typography>
+      <Stack spacing={1}>
+        <Button component={Link} to="/home" variant="outlined" fullWidth>🏠 Accueil</Button>
+        <Button component={Link} to="/product" variant="outlined" fullWidth>🛍️ Produits</Button>
+        <Button component={Link} to="/promotion" variant="outlined" fullWidth>🔥 Promotions</Button>
+ 
+      </Stack>
+    </Box>
 
-          <MuiLink component={Link} to="/product" underline="none" color="primary" display="block" mb={1}>
-            Produits
-          </MuiLink>
+    {/* Promo */}
+    <Box bgcolor="#f5f5f5" borderRadius={2} p={2} mb={3}>
+      <Typography fontWeight="bold">🎉 Code Promo</Typography>
+      <Typography variant="body2">Utilisez <strong>ÉTÉ2025</strong> pour -15%</Typography>
+    </Box>
 
-          <MuiLink component={Link} to="/categories" underline="none" color="primary" display="block" mb={1}>
-            Catégories
-          </MuiLink>
+    {/* Infos contact */}
+    <Box>
+      <Typography variant="subtitle2" color="text.secondary" mb={1}>Support</Typography>
+      <Typography variant="body2">📞 06 00 00 00 00</Typography>
+      <Typography variant="body2">📧 support@exemple.com</Typography>
+      <Typography variant="body2" mt={1}>Lun - Ven : 9h - 18h</Typography>
+    </Box>
 
-          <MuiLink component={Link} to="/promotion" underline="none" color="primary" display="block" mb={1}>
-            Promotions
-          </MuiLink>
+ 
+  </Box>
+</Drawer>
 
-          <MuiLink component={Link} to="/panier" underline="none" color="primary" display="block" mb={1}>
-            Mon Panier
-          </MuiLink>
 
-          <MuiLink component={Link} to="/compte" underline="none" color="primary" display="block" mb={1}>
-            Mon Compte
-          </MuiLink>
 
-          <MuiLink component={Link} to="/contact" underline="none" color="primary" display="block">
-            Contact
-          </MuiLink>
-        </Box>
-      </Drawer>
     </Container>
   );
 }

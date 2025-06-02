@@ -1,4 +1,4 @@
-.d{
- 
-    background-color: green !important;
-}
+.d {
+    background-color: #9f9c62 !important; /* Changement de couleur de fond au survol */
+    color: #32342d !important; /* Changement de couleur de texte au survol */
+  }

@@ -1,101 +1,172 @@
-import { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Container,
-  Typography,
-  Grid,
-  Card,
-  CardMedia,
-  CardContent,
-  CardActions,
-  Button,
-  Box,
-  CircularProgress,
-  Chip
+  Box, Container, Typography, Grid, Card, CardMedia,
+  CardContent, CardActions, Button, Chip, Divider
 } from '@mui/material';
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 
-export default function GiftListingPage() {
-  const [gifts, setGifts] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function CadeauPage() {
+  const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Simuler les données cadeaux (à remplacer par une vraie API)
-    const timer = setTimeout(() => {
-      const dummyGifts = [
-        { id: 1, name: 'Montre de luxe', price: 250, category: 'Accessoires', stock: 5, image: 'https://via.placeholder.com/300x200' },
-        { id: 2, name: 'Coffret parfum', price: 99, category: 'Beauté', stock: 8, image: 'https://via.placeholder.com/300x200' },
-        { id: 3, name: 'Panier gourmand', price: 60, category: 'Gastronomie', stock: 10, image: 'https://via.placeholder.com/300x200' },
-        { id: 4, name: 'Écharpe en cachemire', price: 45, category: 'Mode', stock: 12, image: 'https://via.placeholder.com/300x200' },
-      ];
-      setGifts(dummyGifts);
-      setLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch('http://localhost:8000/api/produits');
+        const data = await res.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Erreur chargement produits", error);
+      }
+    };
+    fetchProducts();
   }, []);
 
-  const addToGiftCart = (gift) => {
-    alert(`${gift.name} ajouté à votre liste de cadeaux !`);
+  const coffrets = products.filter(p => p.categorie_id === 6);
+  const moinsDe100 = products.filter(p => p.prix < 100);
+  const entre100et250 = products.filter(p => p.prix >= 100 && p.prix <= 250);
+  const plusDe250 = products.filter(p => p.prix > 250);
+
+  const renderProductCard = (product) => {
+    const imageUrl = product.image?.startsWith('http')
+      ? product.image
+      : `http://localhost:8000${product.image}`;
+
+    return (
+      <Grid item xs={12} sm={6} md={3} key={product.id}>
+        <Card
+          elevation={4}
+          sx={{
+            height: '100%',
+            borderRadius: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            transition: 'transform 0.3s ease',
+            '&:hover': { transform: 'translateY(-5px)' }
+          }}
+        >
+          <CardMedia
+            component="img"
+            height="180"
+            image={imageUrl}
+            alt={product.nom}
+            sx={{ objectFit: 'contain', backgroundColor: '#fcfcfc' }}
+          />
+          <CardContent sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" fontWeight="bold" gutterBottom>
+              {product.nom}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {product.description || 'Un produit idéal à offrir.'}
+            </Typography>
+            <Typography variant="subtitle1" color="primary" fontWeight="bold" mt={1}>
+              {product.prix.toFixed(2)} $
+            </Typography>
+            <Chip
+              label={product.stock > 0 ? `En stock (${product.stock})` : 'Épuisé'}
+              color={product.stock > 0 ? 'success' : 'error'}
+              size="small"
+              sx={{ mt: 1 }}
+            />
+          </CardContent>
+          <CardActions>
+            <button
+              className="snipcart-add-item"
+              data-item-id={product.id}
+              data-item-price={product.prix}
+              data-item-url="/cadeau"
+              data-item-description={product.description || product.nom}
+              data-item-name={product.nom}
+              data-item-image={imageUrl}
+              disabled={product.stock <= 0}
+              style={{
+                width: '100%',
+                padding: '12px',
+                fontWeight: 'bold',
+                backgroundColor: product.stock > 0 ? '#CFB284' : '#ddd',
+                color: '#000',
+                border: 'none',
+                cursor: product.stock > 0 ? 'pointer' : 'not-allowed',
+                borderRadius: '0 0 12px 12px',
+              }}
+            >
+              🎁 Ajouter au panier
+            </button>
+          </CardActions>
+        </Card>
+      </Grid>
+    );
   };
 
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <CircularProgress />
-        <Typography sx={{ ml: 2 }}>Chargement des cadeaux...</Typography>
-      </Box>
-    );
-  }
-
   return (
-    <Container sx={{ py: 4 }}>
-      <Typography variant="h3" component="h1" sx={{ mb: 4, textAlign: 'center', fontWeight: 'bold' }}>
-        Cadeaux 🎁
-      </Typography>
+    <Container sx={{ py: 6 }}>
+      {/* HEADER */}
+      <Box textAlign="center" mb={5}>
+        <Typography variant="h3" fontWeight="bold" gutterBottom>
+          🎁 Offrez un moment de bonheur
+        </Typography>
+        <Typography variant="h6" color="text.secondary">
+          Coffrets élégants, cadeaux attentionnés et carte à offrir.
+        </Typography>
+      </Box>
 
+      {/* COFFRETS */}
+      <Divider textAlign="left" sx={{ my: 4 }}>
+        <Typography variant="h5" fontWeight="bold">✨ Coffrets Cadeaux</Typography>
+      </Divider>
       <Grid container spacing={3}>
-        {gifts.map(gift => (
-          <Grid item xs={12} sm={6} md={4} key={gift.id}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', transition: '0.3s', '&:hover': { boxShadow: 6 } }}>
-              <CardMedia
-                component="img"
-                height="200"
-                image={gift.image}
-                alt={gift.name}
-              />
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography gutterBottom variant="h5" component="h2">
-                  {gift.name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  Catégorie: {gift.category}
-                </Typography>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
-                  <Typography variant="h6" fontWeight="bold">
-                    {gift.price} €
-                  </Typography>
-                  <Chip
-                    label={gift.stock > 0 ? `En stock (${gift.stock})` : 'Épuisé'}
-                    color={gift.stock > 0 ? 'primary' : 'error'}
-                    size="small"
-                  />
-                </Box>
-              </CardContent>
-              <CardActions>
-                <Button
-                  variant="contained"
-                  fullWidth
-                  startIcon={<CardGiftcardIcon />}
-                  onClick={() => addToGiftCart(gift)}
-                  disabled={gift.stock <= 0} className='d'
-                >
-                  Offrir
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
+        {coffrets.length ? coffrets.map(renderProductCard) : (
+          <Typography>Aucun coffret trouvé.</Typography>
+        )}
       </Grid>
+
+      {/* PAR BUDGET */}
+      <Divider textAlign="left" sx={{ my: 5 }}>
+        <Typography variant="h5" fontWeight="bold">💰 Cadeaux par budget</Typography>
+      </Divider>
+
+      <Typography variant="subtitle1" fontWeight="bold" mt={3} mb={1}>Moins de 100 $</Typography>
+      <Grid container spacing={3}>
+        {moinsDe100.map(renderProductCard)}
+      </Grid>
+
+      <Typography variant="subtitle1" fontWeight="bold" mt={5} mb={1}>Entre 100 et 250 $</Typography>
+      <Grid container spacing={3}>
+        {entre100et250.map(renderProductCard)}
+      </Grid>
+
+      <Typography variant="subtitle1" fontWeight="bold" mt={5} mb={1}>Plus de 250 $</Typography>
+      <Grid container spacing={3}>
+        {plusDe250.map(renderProductCard)}
+      </Grid>
+
+      {/* CARTE CADEAU */}
+      <Box
+        mt={8}
+        p={4}
+        borderRadius={4}
+        bgcolor="#f7f0e7"
+        textAlign="center"
+        boxShadow={2}
+      >
+        <Typography variant="h5" fontWeight="bold" gutterBottom>
+          💌 Carte Cadeau Électronique
+        </Typography>
+        <Typography variant="body1" mb={2}>
+          Laissez vos proches choisir eux-mêmes. Une solution simple et rapide à offrir !
+        </Typography>
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: '#CFB284',
+            color: '#000',
+            fontWeight: 'bold',
+            px: 4,
+            py: 1.5,
+            mt: 1
+          }}
+        >
+          Offrir une carte cadeau
+        </Button>
+      </Box>
     </Container>
   );
 }

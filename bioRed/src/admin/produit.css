@@ -1,265 +1,298 @@
-/* Conteneur principal */
-.container {
-    padding: 2rem;
-    margin-left: 250px;  /* Décale le contenu vers la droite pour laisser de la place au sidebar */
-    width: calc(100% - 250px);  /* Réduit la largeur du contenu principal pour laisser la place au sidebar */
+/* ======================================
+   Styles globaux et mise en page générale
+   ====================================== */
+
+/* Inclure le box-sizing globalement */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* En-tête */
+/* Conteneur principal */
+.container {
+  padding: 2rem;
+  margin-left: 250px;               /* Décale le contenu pour la sidebar */
+  width: calc(100% - 250px);        /* Ajuste la largeur */
+}
+
+/* ======================================
+   En-tête (header)
+   ====================================== */
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
 .header .title {
-    font-size: 2rem;
-    font-weight: bold;
-    color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
 }
 
 .header .subtitle {
-    font-size: 1rem;
-    color: white;
+  font-size: 1rem;
+  color: white;
 }
 
 .header-actions {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .header-actions .btn-new {
-    background-color: #3b82f6;
-    color: white;
-    padding: 0.125rem 0.5rem;  /* Réduit encore la taille du bouton */
-    border-radius: 0.5rem;
-    display: flex;
-    align-items: center;
-    margin-right: 1rem;
-    font-size: 1.3rem;  /* Réduit la taille de la police */
-    transition: background-color 0.3s;
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+  font-size: 1.3rem;
+  transition: background-color 0.3s;
 }
 
-
-
 .header-actions .btn-new:hover {
-    background-color: #2563eb;
+  background-color: #2563eb;
 }
 
 .header-actions .profile-img img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-/* Cards statistiques (rectangulaires) */
+/* ======================================
+   Cards statistiques
+   ====================================== */
 .stats-grid {
-    color: black;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+  color: black;
 }
 
 .stat-card {
-    padding: 1.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    background-color: #9f9c62;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    height: 200px;  /* Fixe la hauteur pour un aspect plus rectangulaire */
-    width: 100%;  /* Prend toute la largeur disponible */
+  background-color: #9f9c62;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  height: auto;                     /* Hauteur adaptative */
+  overflow: hidden;                 /* Empêche le débordement */
+  display: flex;
+  flex-direction: column;
 }
 
 .stat-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .stat-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .stat-header h3 {
-    font-size: 1.125rem;
-    font-weight: bold;
+  font-size: 1.125rem;
+  font-weight: bold;
 }
 
 .stat-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
+  display: flex;
+  flex-wrap: wrap;                  /* Permet au contenu de se wrapper */
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.stat-footer > * {
+  flex: 1 1 45%;                    /* Chaque bloc prend environ 45% */
+  margin-bottom: 0.5rem;
 }
 
 .stat-footer .stat-value {
-    font-size: 2rem;
-    font-weight: bold;
+  font-size: 2rem;
+  font-weight: bold;
+  word-wrap: break-word;
 }
 
 .trend {
-    font-size: 0.875rem;
-    display: flex;
-    align-items: center;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
 }
 
 .trend.up {
-    color: #16a34a;
+  color: #16a34a;
 }
 
 .trend.down {
-    color: #dc2626;
+  color: #dc2626;
 }
 
+/* Icônes dans les cards */
 .icon {
-    width: 3rem;
-    height: 3rem;
-    border-radius: 0.75rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f3f4f6;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.75rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f3f4f6;
 }
 
 .icon.blue {
-    background-color: #bfdbfe;
-    color: #2563eb;
+  background-color: #bfdbfe;
+  color: #2563eb;
 }
 
 .icon.green {
-    background-color: #bbf7d0;
-    color: #16a34a;
+  background-color: #bbf7d0;
+  color: #16a34a;
 }
 
 .icon.red {
-    background-color: #fecaca;
-    color: #dc2626;
+  background-color: #fecaca;
+  color: #dc2626;
 }
 
-/* Tableau des produits */
+/* ======================================
+   Tableau des produits
+   ====================================== */
 .table-card {
-    color: black;
-    margin-top: 3rem;
-    background-color:  #9f9c62;
-    border-radius: 1rem;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #9f9c62;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-top: 3rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: black;
 }
 
 .table-header h2 {
-    font-size: 1.5rem;
-    font-weight: bold;
-
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .table-content table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.table-content th, .table-content td {
-    padding: 0.75rem;
-    text-align: left;
-    border-bottom: 1px solid #e5e7eb;
+.table-content th,
+.table-content td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .table-content th {
-    font-weight: bold;
+  font-weight: bold;
 }
 
-/* Modal d'ajout de produit */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-  }
-  
-  .modal-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 1rem;
+/* Ligne de tableau pour stock faible (optionnel) */
+.low-stock-row {
+  background-color: rgba(255, 0, 0, 0.1);
+}
 
-  }
-  
-  .modal-box {
-    background-color: #9f9c62 !important;
-    border-radius: 1rem;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 800px;
-  }
-  
-  .form-container {
-    padding: 1.5rem;
-  }
-  
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-  
-  .full-width {
-    grid-column: span 2;
-  }
-  
-  .label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #000;
-    margin-bottom: 0.5rem;
-  }
-  
-  .input {
-    width: 100%;
-    padding: 0.5rem 1rem;
-    border: 1px solid #ccc;
-    border-radius: 0.5rem;
-    font-size: 1rem;
-  }
-  
-  .input:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-  }
-  
-  .button-group {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-  
-  .btn-cancel {
-    padding: 0.5rem 1.5rem;
-    border: 1px solid #ccc;
-    background-color: white;
-    border-radius: 0.5rem;
-    cursor: pointer;
-  }
-  
-  .btn-cancel:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .btn-save {
-    padding: 0.5rem 1.5rem;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-  }
-  
-  .btn-save:hover {
-    background-color: #0056b3;
-  }
-  
+/* ======================================
+   Modal d’ajout / édition de produit
+   ====================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.modal-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.modal-box {
+  background-color: #9f9c62 !important;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+}
+
+.form-container {
+  padding: 1.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.full-width {
+  grid-column: span 2;
+}
+
+.label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #000;
+  margin-bottom: 0.5rem;
+}
+
+.input {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-cancel {
+  padding: 0.5rem 1.5rem;
+  border: 1px solid #ccc;
+  background-color: white;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background-color: #f0f0f0;
+}
+
+.btn-save {
+  padding: 0.5rem 1.5rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-save:hover {
+  background-color: #0056b3;
+}

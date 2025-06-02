@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box, IconButton, Stack, Container, Typography,
   InputBase, Badge, Button, Menu, MenuItem
@@ -10,9 +10,16 @@ import {
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
-// ======================
-// STYLES
-// ======================
+// ========== STYLES ==========
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    right: -3,
+    top: 13,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 4px',
+  },
+}));
+
 const Search = styled('div')(({ theme }) => ({
   flexGrow: 0.2,
   position: 'relative',
@@ -23,15 +30,6 @@ const Search = styled('div')(({ theme }) => ({
   width: 'auto',
   display: 'flex',
   alignItems: 'center',
-}));
-
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    right: -3,
-    top: 13,
-    border: `2px solid ${theme.palette.background.paper}`,
-    padding: '0 4px',
-  },
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -57,87 +55,82 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-// ======================
-// COMPOSANT NAVBAR
-// ======================
+// ========== COMPONENT ==========
 function Navbar2() {
   const [anchorElCategories, setAnchorElCategories] = useState(null);
   const [anchorElProfile, setAnchorElProfile] = useState(null);
-  const [anchorElCart, setAnchorElCart] = useState(null);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [categories, setCategories] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');
 
   const navigate = useNavigate();
 
-  const options = [
-    'All Categories',
-    'parfums',
-    'soins',
-    'gommages',
-    'bougies',
-    'coffrets',
-    'accessoires',
-    'brumes'
-  ];
+  // 🔄 Récupérer les catégories depuis l'API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch('http://localhost:8000/api/categories');
+        const data = await res.json();
+        setCategories(data);
+      } catch (error) {
+        console.error('Erreur chargement des catégories', error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
-  // CATEGORIES
+  // 🔍 Filtrage
+  const filteredCategories = categories.filter(cat =>
+    cat.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Menu actions
   const handleClickCategories = (event) => {
     setAnchorElCategories(event.currentTarget);
   };
+
   const handleCloseCategories = () => {
     setAnchorElCategories(null);
+    setSearchQuery('');
   };
-  const handleMenuItemClick = (event, index) => {
-    setSelectedIndex(index);
+
+  const handleMenuItemClick = (name) => {
+    setSelectedCategory(name);
     setAnchorElCategories(null);
+    setSearchQuery('');
 
-    const category = options[index];
-    const path = category === 'All Categories'
+    const path = name === 'All Categories'
       ? '/product'
-      : `/product/${category.toLowerCase()}`;
-    navigate(path);
-  };
-
-  // PROFILE
-  const handleClickProfile = (event) => {
-    setAnchorElProfile(event.currentTarget);
-  };
-  const handleCloseProfile = () => {
-    setAnchorElProfile(null);
-  };
-
-  // CART
-  const handleClickCart = (event) => {
-    setAnchorElCart(event.currentTarget);
-  };
-  const handleCloseCart = () => {
-    setAnchorElCart(null);
-  };
-
-  // NAVIGATION
-  const handleNavigate = (path) => {
-    handleCloseProfile();
+      : `/product/${name.toLowerCase()}`;
     navigate(path);
   };
 
   return (
     <Box sx={{ bgcolor: '#CFB284', py: 1 }}>
       <Container sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        {/* Logo */}
         <Stack
           direction="row"
           alignItems="center"
           spacing={1}
           sx={{ cursor: 'pointer' }}
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/home')}
         >
           <ShoppingCartOutlined />
           <Typography variant="body2" fontWeight="bold">E-commerce</Typography>
         </Stack>
 
+        {/* Recherche + Catégories */}
         <Search sx={{ borderRadius: "22px", justifyContent: 'space-between' }}>
           <SearchIconWrapper>
             <SearchIcon />
           </SearchIconWrapper>
-          <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
+          <StyledInputBase
+            placeholder="Rechercher une catégorie…"
+            inputProps={{ 'aria-label': 'search' }}
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+          />
           <Button
             id="categories-button"
             aria-controls={Boolean(anchorElCategories) ? 'categories-menu' : undefined}
@@ -158,7 +151,7 @@ function Navbar2() {
             }}
             endIcon={<ExpandMore />}
           >
-            {options[selectedIndex]}
+            {selectedCategory}
           </Button>
 
           <Menu
@@ -166,73 +159,44 @@ function Navbar2() {
             anchorEl={anchorElCategories}
             open={Boolean(anchorElCategories)}
             onClose={handleCloseCategories}
-            MenuListProps={{
-              'aria-labelledby': 'categories-button',
-              role: 'listbox',
-            }}
+            MenuListProps={{ 'aria-labelledby': 'categories-button' }}
           >
-            {options.map((option, index) => (
-              <MenuItem
-                key={option}
-                onClick={(event) => handleMenuItemClick(event, index)}
-              >
-                {option}
+            <MenuItem onClick={() => handleMenuItemClick('All Categories')}>
+              All Categories
+            </MenuItem>
+            {filteredCategories.map((cat) => (
+              <MenuItem key={cat.id} onClick={() => handleMenuItemClick(cat.name)}>
+                {cat.name}
               </MenuItem>
             ))}
           </Menu>
         </Search>
 
+        {/* Profile + Panier */}
         <Stack direction="row" spacing={2}>
           {/* Profile */}
           <IconButton
-            onClick={handleClickProfile}
-            aria-controls="profile-menu"
-            aria-haspopup="true"
+            onClick={(e) => setAnchorElProfile(e.currentTarget)}
             sx={{ color: 'inherit' }}
           >
             <PersonIcon />
           </IconButton>
           <Menu
-            id="profile-menu"
             anchorEl={anchorElProfile}
             open={Boolean(anchorElProfile)}
-            onClose={handleCloseProfile}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
+            onClose={() => setAnchorElProfile(null)}
           >
-            <MenuItem onClick={() => handleNavigate('/seconnecter')}>
-              Se connecter
+            <MenuItem onClick={() => navigate('/')}>
+              Se deconnecter
             </MenuItem>
           </Menu>
 
-          {/* Cart */}
-          <IconButton aria-label="cart" onClick={handleClickCart}>
-            <StyledBadge badgeContent={4} color="primary">
-              <ShoppingCartIcon />
+          {/* Panier Snipcart */}
+          <IconButton className="snipcart-checkout">
+            <StyledBadge color="primary">
+              <ShoppingCartIcon sx={{ color: '#000' }} />
             </StyledBadge>
           </IconButton>
-          <Menu
-            id="cart-menu"
-            anchorEl={anchorElCart}
-            open={Boolean(anchorElCart)}
-            onClose={handleCloseCart}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-          >
-            <MenuItem disabled>Votre panier est vide</MenuItem>
-          </Menu>
         </Stack>
       </Container>
     </Box>

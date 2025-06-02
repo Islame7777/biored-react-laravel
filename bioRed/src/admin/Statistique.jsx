@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'; 
 import './statistique.css';
 import { Line } from 'react-chartjs-2';
 import {
@@ -23,17 +23,32 @@ ChartJS.register(
 export default function Statistiques() {
   const [comptes, setComptes] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedComptes = JSON.parse(localStorage.getItem('comptes')) || [];
-    const storedCategories = JSON.parse(localStorage.getItem('categories')) || [];
-    setComptes(storedComptes);
-    setCategories(storedCategories);
+    async function fetchData() {
+      setLoading(true);
+      try {
+        // 👉 Remplace les URL par les tiennes
+        const [comptesRes, categoriesRes] = await Promise.all([
+          fetch('http://localhost:8000/api/compte'),
+          fetch('http://localhost:8000/api/categories'),
+        ]);
+        const comptesData = await comptesRes.json();
+        const categoriesData = await categoriesRes.json();
+        setComptes(comptesData);
+        setCategories(categoriesData);
+      } catch (err) {
+        alert("Erreur lors de la récupération des données !");
+      }
+      setLoading(false);
+    }
+    fetchData();
   }, []);
 
   const totalComptes = comptes.length;
-  const totalAdmins = comptes.filter(c => c.role === 'Admin').length;
-  const totalUtilisateurs = comptes.filter(c => c.role === 'Utilisateur').length;
+  const totalAdmins = comptes.filter(c => c.role?.toLowerCase() === 'admin').length;
+  const totalUtilisateurs = comptes.filter(c => c.role?.toLowerCase() === 'utilisateur').length;
   const totalCategories = categories.length;
 
   const chartData = {
@@ -73,25 +88,29 @@ export default function Statistiques() {
       <div className="stat">
         <div className="stat-c">
           <h2>Total Comptes</h2>
-          <p>{totalComptes}</p>
+          <p>{loading ? '...' : totalComptes}</p>
         </div>
         <div className="stat-c">
           <h2>Admins</h2>
-          <p>{totalAdmins}</p>
+          <p>{loading ? '...' : totalAdmins}</p>
         </div>
         <div className="stat-c">
           <h2>Utilisateurs</h2>
-          <p>{totalUtilisateurs}</p>
+          <p>{loading ? '...' : totalUtilisateurs}</p>
         </div>
         <div className="stat-c">
           <h2>Catégories</h2>
-          <p>{totalCategories}</p>
+          <p>{loading ? '...' : totalCategories}</p>
         </div>
       </div>
 
       <div className="card">
         <h2>Résumé global</h2>
-        <Line data={chartData} options={chartOptions} />
+        {!loading ? (
+          <Line data={chartData} options={chartOptions} />
+        ) : (
+          <div style={{textAlign: "center", color: "#007bff", fontSize: 24, padding: 32}}>Chargement…</div>
+        )}
       </div>
     </div>
   );

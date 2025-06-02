@@ -2,65 +2,77 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Compte;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class CompteController extends Controller
 {
-    public function handle(Request $request)
+    // GET /compte
+    public function index()
     {
-        $action = $request->input('action');
-
-        if ($action === 'register') {
-            return $this->register($request);
-        } elseif ($action === 'login') {
-            return $this->login($request);
-        }
-
-        return response()->json(['message' => 'Action invalide'], 400);
+        return response()->json(Compte::all());
     }
 
-    private function register(Request $request)
+    // POST /compte
+    public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'firstname' => 'required|string|alpha',
-            'lastname' => 'required|string|alpha',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8',
+        $validated = $request->validate([
+            'username' => 'required|string|max:255',
+            'email' => 'required|email|unique:comptes',
+            'password' => 'required|string|min:6',
+          'role' => 'required|string|in:Utilisateur,Admin',
+ // Validation du rôle
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validation échouée',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        $user = User::create([
-            'name' => $request->firstname . ' ' . $request->lastname,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'client', // ou 'user' si tu préfères
+        $compte = Compte::create([
+            'username' => $validated['username'],
+            'email' => $validated['email'],
+            'password' => bcrypt($validated['password']),
+            'role' => $validated['role'], // Ajout du rôle
         ]);
 
-        return response()->json(['message' => 'Inscription réussie'], 201);
+        return response()->json($compte, 201);
     }
 
-    private function login(Request $request)
+    // GET /compte/{id}
+    public function show($id)
     {
-        $user = User::where('email', $request->email)->first();
+        $compte = Compte::find($id);
+        if (!$compte) {
+            return response()->json(['message' => 'Compte non trouvé'], 404);
+        }
+        return response()->json($compte);
+    }
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Email ou mot de passe invalide'], 401);
+    // PUT/PATCH /compte/{id}
+    public function update(Request $request, $id)
+    {
+        $compte = Compte::find($id);
+        if (!$compte) {
+            return response()->json(['message' => 'Compte non trouvé'], 404);
         }
 
-        // Tu peux générer un token JWT ici si tu veux
-        return response()->json([
-            'message' => 'Connexion réussie',
-            'token' => base64_encode($user->email), // exemple simple à remplacer par un vrai token
-            'role' => $user->role
+        $validated = $request->validate([
+            'username' => 'sometimes|required|string|max:255',
+            'email' => 'sometimes|required|email|unique:comptes,email,' . $id,
+            'password' => 'sometimes|required|string|min:6',
+            'role' => 'sometimes|required|in:utilisateur,admin', // Validation du rôle
         ]);
+
+        $compte->update($validated);
+
+        return response()->json($compte);
+    }
+
+    // DELETE /compte/{id}
+    public function destroy($id)
+    {
+        $compte = Compte::find($id);
+        if (!$compte) {
+            return response()->json(['message' => 'Compte non trouvé'], 404);
+        }
+
+        $compte->delete();
+        return response()->json(['message' => 'Compte supprimé avec succès']);
     }
 }
