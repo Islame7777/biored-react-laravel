@@ -1,23 +1,23 @@
-# 🌐 Full Stack Web Application (React & Laravel)
+# 🧬 BioRed
 
-A full-stack web application developed using React for the frontend and Laravel for the backend. The project demonstrates modern web development practices, API integration, database management, and responsive user interface design.
+BioRed is a full-stack web application developed using React and Laravel. The platform combines a modern user interface with a powerful backend architecture to deliver efficient and scalable web services.
 
 ## 🚀 Features
 
-- Responsive Web Interface
+- Responsive User Interface
 - React Frontend
 - Laravel Backend
 - REST API Integration
 - Database Management
-- Authentication & User Management
+- User Authentication
 
-## 🛠 Technologies
+## 🛠 Technologies Used
 
 ### Frontend
 - React
 - JavaScript
-- HTML5
-- CSS3
+- HTML
+- CSS
 
 ### Backend
 - Laravel
